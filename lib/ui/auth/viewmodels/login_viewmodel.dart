@@ -10,12 +10,20 @@ class LoginViewModel {
   final AuthRepository _authRepository;
 
   late final login = Command1(_login);
+  late final usuarioLogado = Command0(_usuarioLogado);
 
   AsyncResultDart<LoggedUser, Exception> _login(Credentials credentials) async {
-    return _authRepository.login(credentials);
+    return await _authRepository.login(credentials);
   }
 
-  AsyncResultDart<Object, Exception> getUser() async {
-    return await _authRepository.getuser();
+  AsyncResultDart<bool, Exception> _usuarioLogado() async {
+    return _authRepository.getuser().fold(
+      (success) {
+        return const Success(true);
+      },
+      (failure) {
+        return const Success(false);
+      },
+    );
   }
 }

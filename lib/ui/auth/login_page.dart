@@ -8,7 +8,7 @@ import 'package:result_command/result_command.dart';
 import 'package:routefly/routefly.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage();
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -19,11 +19,20 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     viewModel.login.addListener(_listenable);
+    viewModel.usuarioLogado.addListener(_listenableLoggedUser);
+    viewModel.usuarioLogado.execute();
   }
 
   final viewModel = injector.get<LoginViewModel>();
   final validator = CredentialsValidator();
   Credentials credentials = Credentials();
+
+  void _listenableLoggedUser() {
+    if (viewModel.usuarioLogado.isSuccess) {
+      var retorno = viewModel.usuarioLogado.value as SuccessCommand;
+      if (retorno.value == true) Routefly.navigate(routePaths.home);
+    }
+  }
 
   void _listenable() {
     if (viewModel.login.isSuccess) {
@@ -62,77 +71,95 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Form(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    onChanged: credentials.setUsername,
-                    validator: validator.byField(credentials, 'username'),
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
-                      border: OutlineInputBorder(),
+      body: ListenableBuilder(
+          listenable: viewModel.usuarioLogado,
+          builder: (context, _) {
+            if (!viewModel.usuarioLogado.isSuccess && viewModel.usuarioLogado.isFailure) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Form(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            onChanged: credentials.setUsername,
+                            validator:
+                                validator.byField(credentials, 'username'),
+                            decoration: const InputDecoration(
+                              labelText: 'Username',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            onChanged: credentials.setPassword,
+                            validator:
+                                validator.byField(credentials, 'password'),
+                            decoration: const InputDecoration(
+                              labelText: 'Password',
+                              border: OutlineInputBorder(),
+                            ),
+                            obscureText: true,
+                          ),
+                          const SizedBox(height: 16.0),
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            onChanged: credentials.seClienteID,
+                            validator:
+                                validator.byField(credentials, 'clientId'),
+                            decoration: const InputDecoration(
+                              labelText: 'Cliente ID',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            onChanged: credentials.setClientSecret,
+                            validator:
+                                validator.byField(credentials, 'clientSecret'),
+                            decoration: const InputDecoration(
+                              labelText: 'Client Secret',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 24.0),
+                          ListenableBuilder(
+                              listenable: viewModel.login,
+                              builder: (context, _) {
+                                return ElevatedButton(
+                                  onPressed: viewModel.login.isRunning
+                                      ? null
+                                      : () {
+                                          if (validator
+                                              .validate(credentials)
+                                              .isValid) {
+                                            _login();
+                                          }
+                                        },
+                                  child: const Text('Login'),
+                                );
+                              }),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    onChanged: credentials.setPassword,
-                    validator: validator.byField(credentials, 'password'),
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                    ),
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    onChanged: credentials.seClienteID,
-                    validator: validator.byField(credentials, 'clientId'),
-                    decoration: const InputDecoration(
-                      labelText: 'Cliente ID',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    onChanged: credentials.setClientSecret,
-                    validator: validator.byField(credentials, 'clientSecret'),
-                    decoration: const InputDecoration(
-                      labelText: 'Client Secret',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 24.0),
-                  ListenableBuilder(
-                      listenable: viewModel.login,
-                      builder: (context, _) {
-                        return ElevatedButton(
-                          onPressed: viewModel.login.isRunning
-                              ? null
-                              : () {
-                                  if (validator.validate(credentials).isValid) {
-                                    _login();
-                                  }
-                                },
-                          child: const Text('Login'),
-                        );
-                      }),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                  ],
+                ),
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          }),
     );
   }
 }
