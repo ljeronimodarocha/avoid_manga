@@ -1,4 +1,4 @@
-import 'package:avoid_manga/data/services/auth/client_http.dart';
+import 'package:avoid_manga/data/services/client_http.dart';
 import 'package:avoid_manga/domain/dtos/credentials.dart';
 import 'package:avoid_manga/domain/entities/user_entity.dart';
 import 'package:avoid_manga/utils/app_constant.dart';

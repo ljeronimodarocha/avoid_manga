@@ -6,9 +6,11 @@ class ClienteHttp {
 
   ClienteHttp(this._dio);
 
-  AsyncResult<Response> get(String url) async {
+  AsyncResult<Response> get(
+      String url, Map<String, dynamic>? paramters, Options? options) async {
     try {
-      final response = await _dio.get(url);
+      final response =
+          await _dio.get(url, options: options, queryParameters: paramters);
       return Success(response);
     } on DioException catch (e) {
       return Failure(e);

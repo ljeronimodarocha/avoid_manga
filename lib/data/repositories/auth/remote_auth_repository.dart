@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:avoid_manga/data/repositories/auth_repository.dart';
+import 'package:avoid_manga/data/repositories/auth/auth_repository.dart';
 import 'package:avoid_manga/data/services/auth/auth_client_http.dart';
 import 'package:avoid_manga/data/services/auth/auth_local_storage.dart';
 import 'package:avoid_manga/domain/dtos/credentials.dart';
@@ -18,8 +18,8 @@ class RemoteAuthRepository implements AuthRepository {
   final AuthClientHttp _authClientHttp;
 
   @override
-  AsyncResult<LoggedUser> getuser() {
-    return _authLocalStorage.getUser();
+  AsyncResult<LoggedUser> getuser() async {
+    return await _authLocalStorage.getUser().onSuccess(_streamController.add);
   }
 
   @override
