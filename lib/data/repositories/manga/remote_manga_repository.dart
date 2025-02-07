@@ -9,7 +9,7 @@ class RemotemangaRepository implements MangaRepository {
   final MangaClientHttp _mangaClientHttp;
 
   @override
-  AsyncResult<List<Manga>> getMangas(int offset) {
-    return _mangaClientHttp.getMangas(offset);
+  AsyncResult<List<Manga>> getMangas(String? name, int offset) {
+    return _mangaClientHttp.getMangas(name,offset);
   }
 }

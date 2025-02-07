@@ -47,6 +47,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      darkTheme: ThemeData.dark(),
       routerConfig: Routefly.routerConfig(
           routes: routes, initialPath: routePaths.auth.login),
     );

@@ -16,5 +16,5 @@ Route b1Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(
       ctx,
       settings,
-      const a1.MyWidget(),
+      const a1.HomePage(),
     );

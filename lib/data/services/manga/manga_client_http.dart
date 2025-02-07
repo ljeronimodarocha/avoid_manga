@@ -10,10 +10,11 @@ class MangaClientHttp {
 
   MangaClientHttp(this._clienteHttp);
 
-  AsyncResult<List<Manga>> getMangas(int offset) async {
+  AsyncResult<List<Manga>> getMangas(String? name, int offset) async {
     final response = await _clienteHttp.get(
       '${AppConstants.baseUrl}/manga',
       {
+        'title': name,
         'limit': 20,
         'offset': offset,
         'availableTranslatedLanguage[]': ['pt-br'],
