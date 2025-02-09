@@ -19,6 +19,7 @@ class MangaClientHttp {
         'offset': offset,
         'availableTranslatedLanguage[]': ['pt-br'],
         'order[latestUploadedChapter]': 'desc',
+        'includes[]': ['cover_art'],
       },
       Options(
         headers: {
@@ -26,12 +27,14 @@ class MangaClientHttp {
         },
       ),
     );
-    return response.map(convertListManga).mapError((ex) => Exception(ex));
+    return response.map(_convertListManga).mapError((ex) => Exception(ex));
   }
 
-  List<Manga> convertListManga(Response response) {
+  List<Manga> _convertListManga(Response response) {
     var list = response.data['data'] as List;
     Iterable<MangaDTO> dto = list.map((manga) => MangaDTO.fromJson(manga));
     return dto.map((dto) => Manga.convertToManga(dto)).toList();
   }
+
+  
 }

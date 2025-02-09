@@ -73,15 +73,23 @@ class _ListMangasComponentState extends State<ListMangasComponent> {
                         ),
                       ),
                       itemBuilder: (BuildContext context, index) {
-                        return ListTile(
-                          style: ListTileStyle.list,
-                          title: Text(
-                            style: const TextStyle(
-                              fontSize: 15,
+                        return MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () {
+                              homeViewModel.goToMangaPage(homeViewModel.mangas[index]);
+                            },
+                            child: ListTile(
+                              style: ListTileStyle.list,
+                              title: Text(
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                ),
+                                textAlign: TextAlign.center,
+                                homeViewModel.mangas[index].title,
+                                selectionColor: Colors.black,
+                              ),
                             ),
-                            textAlign: TextAlign.center,
-                            homeViewModel.mangas[index].title,
-                            selectionColor: Colors.black,
                           ),
                         );
                       }));

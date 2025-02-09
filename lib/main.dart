@@ -15,7 +15,7 @@ void main() {
   );
 }
 
-@Main('lib/src/ui')
+@Main('lib/ui')
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
@@ -49,7 +49,9 @@ class _MainAppState extends State<MainApp> {
     return MaterialApp.router(
       darkTheme: ThemeData.dark(),
       routerConfig: Routefly.routerConfig(
-          routes: routes, initialPath: routePaths.auth.login),
+        routes: routes,
+        initialPath: routePaths.auth.login,
+      ),
     );
   }
 }

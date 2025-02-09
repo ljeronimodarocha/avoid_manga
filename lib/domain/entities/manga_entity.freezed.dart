@@ -25,6 +25,7 @@ mixin _$Manga {
   String get type => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
+  String? get fileName => throw _privateConstructorUsedError;
 
   /// Serializes this Manga to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,7 +45,8 @@ abstract class $MangaCopyWith<$Res> {
       {@MangaResponseConverter() String id,
       String type,
       String title,
-      String? description});
+      String? description,
+      String? fileName});
 }
 
 /// @nodoc
@@ -66,6 +68,7 @@ class _$MangaCopyWithImpl<$Res, $Val extends Manga>
     Object? type = null,
     Object? title = null,
     Object? description = freezed,
+    Object? fileName = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -84,6 +87,10 @@ class _$MangaCopyWithImpl<$Res, $Val extends Manga>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      fileName: freezed == fileName
+          ? _value.fileName
+          : fileName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -99,7 +106,8 @@ abstract class _$$MangaImplCopyWith<$Res> implements $MangaCopyWith<$Res> {
       {@MangaResponseConverter() String id,
       String type,
       String title,
-      String? description});
+      String? description,
+      String? fileName});
 }
 
 /// @nodoc
@@ -119,6 +127,7 @@ class __$$MangaImplCopyWithImpl<$Res>
     Object? type = null,
     Object? title = null,
     Object? description = freezed,
+    Object? fileName = freezed,
   }) {
     return _then(_$MangaImpl(
       null == id
@@ -137,6 +146,10 @@ class __$$MangaImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
+      freezed == fileName
+          ? _value.fileName
+          : fileName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -145,7 +158,7 @@ class __$$MangaImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MangaImpl implements _Manga {
   const _$MangaImpl(@MangaResponseConverter() this.id, this.type, this.title,
-      this.description);
+      this.description, this.fileName);
 
   factory _$MangaImpl.fromJson(Map<String, dynamic> json) =>
       _$$MangaImplFromJson(json);
@@ -159,10 +172,12 @@ class _$MangaImpl implements _Manga {
   final String title;
   @override
   final String? description;
+  @override
+  final String? fileName;
 
   @override
   String toString() {
-    return 'Manga(id: $id, type: $type, title: $title, description: $description)';
+    return 'Manga(id: $id, type: $type, title: $title, description: $description, fileName: $fileName)';
   }
 
   @override
@@ -174,12 +189,15 @@ class _$MangaImpl implements _Manga {
             (identical(other.type, type) || other.type == type) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
-                other.description == description));
+                other.description == description) &&
+            (identical(other.fileName, fileName) ||
+                other.fileName == fileName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, type, title, description);
+  int get hashCode =>
+      Object.hash(runtimeType, id, type, title, description, fileName);
 
   /// Create a copy of Manga
   /// with the given fields replaced by the non-null parameter values.
@@ -202,7 +220,8 @@ abstract class _Manga implements Manga {
       @MangaResponseConverter() final String id,
       final String type,
       final String title,
-      final String? description) = _$MangaImpl;
+      final String? description,
+      final String? fileName) = _$MangaImpl;
 
   factory _Manga.fromJson(Map<String, dynamic> json) = _$MangaImpl.fromJson;
 
@@ -215,6 +234,8 @@ abstract class _Manga implements Manga {
   String get title;
   @override
   String? get description;
+  @override
+  String? get fileName;
 
   /// Create a copy of Manga
   /// with the given fields replaced by the non-null parameter values.

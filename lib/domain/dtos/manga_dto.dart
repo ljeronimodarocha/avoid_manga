@@ -120,14 +120,46 @@ class MangaRelationship {
   final String id;
   final String type;
   final String? related;
+  final AttributesRelationship? attributes;
 
-  MangaRelationship({required this.id, required this.type, this.related});
+  MangaRelationship(
+      {required this.id, required this.type, this.related, this.attributes});
 
   factory MangaRelationship.fromJson(Map<String, dynamic> json) {
     return MangaRelationship(
       id: json['id'],
       type: json['type'],
       related: json['related'],
+      attributes: json['attributes'] != null
+          ? AttributesRelationship(
+              description: json['attributes']['description'],
+              volume: json['attributes']['volume'],
+              fileName: json['attributes']['fileName'],
+              locale: json['attributes']['locale'],
+              createdAt: json['attributes']['createdAt'],
+              updatedAt: json['attributes']['updatedAt'],
+              version: json['attributes']['version'],
+            )
+          : null,
     );
   }
+}
+
+class AttributesRelationship {
+  final String? description;
+  final String? volume;
+  final String? fileName;
+  final String? locale;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? version;
+
+  AttributesRelationship(
+      {required this.description,
+      required this.volume,
+      required this.fileName,
+      required this.locale,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.version});
 }

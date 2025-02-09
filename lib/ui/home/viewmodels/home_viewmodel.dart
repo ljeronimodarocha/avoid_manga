@@ -1,7 +1,9 @@
 import 'package:avoid_manga/data/repositories/manga/manga_repository.dart';
 import 'package:avoid_manga/domain/entities/manga_entity.dart';
+import 'package:avoid_manga/main.dart';
 import 'package:result_command/result_command.dart';
 import 'package:result_dart/result_dart.dart';
+import 'package:routefly/routefly.dart';
 
 class HomeViewmodel {
   HomeViewmodel(this._mangaRepository);
@@ -33,5 +35,9 @@ class HomeViewmodel {
       _foundMangas = success;
     });
     return Success.unit();
+  }
+
+  void goToMangaPage(Manga manga) {
+    Routefly.push(routePaths.manga, arguments: manga.toJson());
   }
 }

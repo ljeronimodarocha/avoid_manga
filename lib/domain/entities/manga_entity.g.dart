@@ -11,6 +11,7 @@ _$MangaImpl _$$MangaImplFromJson(Map<String, dynamic> json) => _$MangaImpl(
       json['type'] as String,
       json['title'] as String,
       json['description'] as String?,
+      json['fileName'] as String?,
     );
 
 Map<String, dynamic> _$$MangaImplToJson(_$MangaImpl instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$$MangaImplToJson(_$MangaImpl instance) =>
       'type': instance.type,
       'title': instance.title,
       'description': instance.description,
+      'fileName': instance.fileName,
     };
