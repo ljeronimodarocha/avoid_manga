@@ -11,19 +11,29 @@ class MangaPage extends StatefulWidget {
 }
 
 class _MangaPageState extends State<MangaPage> {
+  late final String coverUrl;
+  late Manga manga;
+  bool _isImagePrecached = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isImagePrecached) {
+      var mangaData = Routefly.of(context).query.arguments;
+      manga = Manga.fromJsonCustom(mangaData);
+      coverUrl = '${AppConstants.baseUrlUpload}covers/${manga.id}/${manga.fileName}';
+      precacheImage(NetworkImage(coverUrl), context);
+      _isImagePrecached = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var manga = Routefly.of(context).query.arguments;
-    manga = Manga.fromJsonCustom(manga);
-    final String coverUrl =
-        '${AppConstants.baseUrlUpload}covers/${manga.id}/${manga.fileName}';
-
-    @override
-    void initState() {
-      precacheImage(NetworkImage(coverUrl), context);
-      super.initState();
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(manga.title),
@@ -36,17 +46,7 @@ class _MangaPageState extends State<MangaPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.network(
-                  '${AppConstants.baseUrlUpload}covers/${manga.id}/${manga.fileName}',
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child; // Retorna a imagem carregada
-                    }
-                    return const Center(
-                        child:
-                            CircularProgressIndicator()); // Mostra loading enquanto carrega
-                  },
-                ),
+                Image.network(coverUrl),
                 const SizedBox(height: 20),
                 const Text(
                   "Descrição",

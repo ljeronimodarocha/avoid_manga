@@ -27,10 +27,7 @@ class HomeViewmodel {
   }
 
   AsyncResult<Unit> _findMangaByTitle(String name) async {
-    if (name.isEmpty) {
-      _foundMangas =[ ];
-      return Success.unit();
-    }
+    _foundMangas =[ ];
     await _mangaRepository.getMangas(name, 10).onSuccess((success) {
       _foundMangas = success;
     });

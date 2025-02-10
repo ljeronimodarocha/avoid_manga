@@ -25,8 +25,7 @@ class InputSearchHome extends StatelessWidget {
           },
           displayStringForOption: (Manga manga) => manga.title,
           onSelected: (Manga manga) {
-            // Adicione aqui a ação desejada ao selecionar um item
-            print('Selecionado: ${manga.title}');
+            homeViewModel.goToMangaPage(manga);
           },
           fieldViewBuilder: (
             BuildContext context,
@@ -37,8 +36,8 @@ class InputSearchHome extends StatelessWidget {
             return TextField(
               controller: textEditingController,
               focusNode: focusNode,
-              onChanged: (value) async {
-                await homeViewModel.findMangaComand.execute(value);
+              onChanged: (value) {
+                homeViewModel.findMangaComand.execute(value);
               },
               decoration: InputDecoration(
                 hintText: 'Pesquisar manga...',
