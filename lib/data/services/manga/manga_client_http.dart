@@ -45,8 +45,14 @@ class MangaClientHttp {
   }
 
   List<Volume> _convertListVolume(Response response) {
-    var list = response.data['volumes'] as List;
-    return list.map((volume) => Volume.fromJson(volume)).toList();
+    var map = response.data['volumes'] as Map;
+    var list = map.values.toList();
+    //return list.map((volume) => Volume.fromJson(volume)).toList();
+    return list
+        .where(
+            (volume) => volume is Map && int.tryParse(volume['volume']) != null)
+        .map((volume) => Volume.fromJson(volume))
+        .toList();
   }
 
   List<Manga> _convertListManga(Response response) {

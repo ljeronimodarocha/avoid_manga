@@ -70,7 +70,7 @@ class MangaDTOAttributes {
           .toList(),
       description: Map<String, String>.from(json['description']),
       isLocked: json['isLocked'],
-      links: Map<String, String>.from(json['links']),
+      links: json['links'] != null ? Map<String, String>.from(json['links']) : {},
       originalLanguage: json['originalLanguage'],
       status: json['status'],
       year: json['year'],

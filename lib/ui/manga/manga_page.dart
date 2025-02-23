@@ -1,6 +1,11 @@
+import 'package:avoid_manga/config/dependencies.dart';
 import 'package:avoid_manga/domain/entities/manga_entity.dart';
+import 'package:avoid_manga/domain/entities/volume_entity.dart';
+import 'package:avoid_manga/ui/manga/components/show_volume.dart';
+import 'package:avoid_manga/ui/manga/viewmodels/manga_viewmodel.dart';
 import 'package:avoid_manga/utils/app_constant.dart';
 import 'package:flutter/material.dart';
+import 'package:result_command/result_command.dart';
 import 'package:routefly/routefly.dart';
 
 class MangaPage extends StatefulWidget {
@@ -13,7 +18,9 @@ class MangaPage extends StatefulWidget {
 class _MangaPageState extends State<MangaPage> {
   late final String coverUrl;
   late Manga manga;
+  late List<Volume> volumes;
   bool _isImagePrecached = false;
+  final mangaViewModel = injector.get<MangaViewmodel>();
 
   @override
   void initState() {
@@ -26,9 +33,22 @@ class _MangaPageState extends State<MangaPage> {
     if (!_isImagePrecached) {
       var mangaData = Routefly.of(context).query.arguments;
       manga = Manga.fromJsonCustom(mangaData);
-      coverUrl = '${AppConstants.baseUrlUpload}covers/${manga.id}/${manga.fileName}';
+      coverUrl =
+          '${AppConstants.baseUrlUpload}covers/${manga.id}/${manga.fileName}';
       precacheImage(NetworkImage(coverUrl), context);
+      mangaViewModel.volumesComand.execute(manga.id);
+      mangaViewModel.volumesComand.addListener(_listenable);
       _isImagePrecached = true;
+    }
+  }
+
+  void _listenable() {
+    if (mangaViewModel.volumesComand.isFailure) {
+      final error = mangaViewModel.volumesComand.value as FailureCommand;
+      final snackBar = SnackBar(
+        content: Text("Erro ao buscar volumes ${error.error.toString()}"),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -58,6 +78,39 @@ class _MangaPageState extends State<MangaPage> {
                   manga.description ?? '',
                   style: const TextStyle(fontSize: 15),
                 ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Volumes",
+                  style: TextStyle(fontSize: 20),
+                ),
+                ListenableBuilder(
+                  listenable: mangaViewModel.volumesComand,
+                  builder: (context, child) {
+                    if (mangaViewModel.volumesComand.isSuccess && mangaViewModel.volumes.isNotEmpty) {
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: mangaViewModel.volumes.length,
+                        prototypeItem: ListTile(
+                          title: Text(
+                            textAlign: TextAlign.center,
+                            mangaViewModel.volumes.first.numero.toString(),
+                            selectionColor: Colors.black,
+                          ),
+                        ),
+                        itemBuilder: (BuildContext context, index) {
+                          return ShowVolume(
+                              volume: mangaViewModel.volumes[index]);
+                        },
+                      );
+                    } else if (mangaViewModel.volumesComand.isRunning) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return const Center(child: FlutterLogo());
+                  },
+                )
               ],
             ),
           ),

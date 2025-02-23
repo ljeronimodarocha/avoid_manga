@@ -11,6 +11,7 @@ import 'package:avoid_manga/data/services/manga/manga_client_http.dart';
 import 'package:avoid_manga/main_viewmodel.dart';
 import 'package:avoid_manga/ui/auth/viewmodels/login_viewmodel.dart';
 import 'package:avoid_manga/ui/home/viewmodels/home_viewmodel.dart';
+import 'package:avoid_manga/ui/manga/viewmodels/manga_viewmodel.dart';
 import 'package:dio/dio.dart';
 
 final injector = AutoInjector();
@@ -28,5 +29,6 @@ void setupDependencies() {
   injector.addSingleton(LoginViewModel.new);
   injector.addSingleton(MainViewmodel.new);
   injector.addSingleton(HomeViewmodel.new);
+  injector.addSingleton(MangaViewmodel.new);
   injector.commit();
 }

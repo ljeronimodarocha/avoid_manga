@@ -6,15 +6,16 @@ class Volume {
   });
   int numero;
   int quantidade;
-  Map<String, Chapter> chapters;
+  List<Chapter> chapters;
 
   factory Volume.fromJson(Map<String, dynamic> json) {
     return Volume(
-      numero: int.parse(json['volume']),
+      numero: int.tryParse(json['volume']) ?? 0,
       quantidade: json['count'],
-      chapters: (json['chapters'] as Map<String, dynamic>).map(
-        (key, value) => MapEntry(key, Chapter.fromJson(value)),
-      ),
+      chapters: (json['chapters'] as Map<String, dynamic>)
+          .values
+          .map((value) => Chapter.fromJson(value))
+          .toList(),
     );
   }
 }
@@ -33,10 +34,10 @@ class Chapter {
 
   factory Chapter.fromJson(Map<String, dynamic> json) {
     return Chapter(
-      numero: json['chapter'],
-      id: json['id'],
-      others: List<String>.from(json['others']),
-      count: json['count'],
+      numero: json['chapter'] ?? '',
+      id: json['id'] ?? '',
+      others: json['others'] != null ? List<String>.from(json['others']) : [],
+      count: json['count'] ?? 0,
     );
   }
 }

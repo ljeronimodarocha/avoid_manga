@@ -58,7 +58,7 @@ class _ListMangasComponentState extends State<ListMangasComponent> {
       child: ListenableBuilder(
           listenable: homeViewModel.mangaComand,
           builder: (context, _) {
-            if (homeViewModel.mangaComand.isSuccess) {
+            if (homeViewModel.mangaComand.isSuccess && homeViewModel.mangas.isNotEmpty) {
               return Align(
                   child: ListView.builder(
                       controller: _scrollController,

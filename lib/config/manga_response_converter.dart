@@ -7,7 +7,6 @@ class MangaResponseConverter
 
   @override
   Manga fromJson(Map<String, dynamic> json) {
-    print(json);
     return Manga.fromJson(json);
   }
 
