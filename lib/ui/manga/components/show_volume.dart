@@ -13,49 +13,30 @@ class ShowVolume extends StatefulWidget {
   State<ShowVolume> createState() => _ShowVolumeState();
 }
 
-class _ShowVolumeState extends State<ShowVolume> {
-  bool _showChapters = false;
-
-  void _toggleChapters() {
-    setState(() {
-      _showChapters = !_showChapters;
-    });
-  }
-
+class _ShowVolumeState extends State<ShowVolume> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          GestureDetector(
-            onTap: _toggleChapters,
-            child: ListTile(
-              style: ListTileStyle.list,
-              title: Text(
-                widget.volume.numero.toString(),
-                style: const TextStyle(
-                  fontSize: 15,
+          ExpansionTile(
+            expandedAlignment: Alignment.center,
+            title: Text(
+              "Volume ${widget.volume.numero}",
+              style: const TextStyle(fontSize: 15),
+              textAlign: TextAlign.center,
+            ),
+            children: widget.volume.chapters.map((chapter) {
+              return ListTile(
+                title: Text(
+                  "Capítulo ${chapter.numero}",
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+              );
+            }).toList(),
           ),
-          if (_showChapters)
-            ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: widget.volume.chapters.length,
-              itemBuilder: (BuildContext context, index) {
-                final chapter = widget.volume.chapters[index];
-                return ListTile(
-                  title: Text(
-                    chapter.numero,
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              },
-            ),
         ],
       ),
     );

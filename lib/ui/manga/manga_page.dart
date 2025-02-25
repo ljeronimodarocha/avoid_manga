@@ -86,22 +86,16 @@ class _MangaPageState extends State<MangaPage> {
                 ListenableBuilder(
                   listenable: mangaViewModel.volumesComand,
                   builder: (context, child) {
-                    if (mangaViewModel.volumesComand.isSuccess && mangaViewModel.volumes.isNotEmpty) {
-                      return ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: mangaViewModel.volumes.length,
-                        prototypeItem: ListTile(
-                          title: Text(
-                            textAlign: TextAlign.center,
-                            mangaViewModel.volumes.first.numero.toString(),
-                            selectionColor: Colors.black,
-                          ),
+                    if (mangaViewModel.volumesComand.isSuccess &&
+                        mangaViewModel.volumes.isNotEmpty) {
+                      return AnimatedSize(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: Column(
+                          children: mangaViewModel.volumes
+                              .map((volume) => ShowVolume(volume: volume))
+                              .toList(),
                         ),
-                        itemBuilder: (BuildContext context, index) {
-                          return ShowVolume(
-                              volume: mangaViewModel.volumes[index]);
-                        },
                       );
                     } else if (mangaViewModel.volumesComand.isRunning) {
                       return const Center(
