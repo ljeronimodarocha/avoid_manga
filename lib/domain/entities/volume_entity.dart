@@ -1,3 +1,5 @@
+import 'package:avoid_manga/domain/entities/chapter_entity.dart';
+
 class Volume {
   Volume({
     required this.numero,
@@ -16,28 +18,6 @@ class Volume {
           .values
           .map((value) => Chapter.fromJson(value))
           .toList(),
-    );
-  }
-}
-
-class Chapter {
-  Chapter({
-    required this.numero,
-    required this.id,
-    required this.others,
-    required this.count,
-  });
-  String numero;
-  String id;
-  List<String> others;
-  int count;
-
-  factory Chapter.fromJson(Map<String, dynamic> json) {
-    return Chapter(
-      numero: json['chapter'] ?? '',
-      id: json['id'] ?? '',
-      others: json['others'] != null ? List<String>.from(json['others']) : [],
-      count: json['count'] ?? 0,
     );
   }
 }

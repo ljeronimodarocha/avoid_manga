@@ -4,8 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:routefly/routefly.dart';
 
 import 'ui/auth/login_page.dart' as a0;
-import 'ui/home/home_page.dart' as a1;
-import 'ui/manga/manga_page.dart' as a2;
+import 'ui/chapter/chapter_page.dart' as a1;
+import 'ui/home/home_page.dart' as a2;
+import 'ui/manga/manga_page.dart' as a3;
 
 Route b0Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(
@@ -17,11 +18,17 @@ Route b1Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(
       ctx,
       settings,
-      const a1.HomePage(),
+      const a1.ChapterPage(),
     );
 Route b2Builder(BuildContext ctx, RouteSettings settings) =>
     Routefly.defaultRouteBuilder(
       ctx,
       settings,
-      const a2.MangaPage(),
+      const a2.HomePage(),
+    );
+Route b3Builder(BuildContext ctx, RouteSettings settings) =>
+    Routefly.defaultRouteBuilder(
+      ctx,
+      settings,
+      const a3.MangaPage(),
     );

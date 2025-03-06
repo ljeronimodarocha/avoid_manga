@@ -5,4 +5,6 @@ class AppConstants {
   static const String baseUrl = "https://api.mangadex.org";
 
   static const String baseUrlUpload = "https://uploads.mangadex.org/";
+
+  static const String discoveryURL = "https://api.mangadex.org/at-home/server";
 }
