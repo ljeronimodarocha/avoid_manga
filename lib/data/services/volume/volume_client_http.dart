@@ -12,7 +12,9 @@ class VolumeClientHttp {
   AsyncResult<List<Volume>> getVolumes(String mangaId) async {
     final response = await _clienteHttp.get(
       '${AppConstants.baseUrl}/manga/$mangaId/aggregate',
-      {},
+      {
+        'translatedLanguage[]': ['pt-br'],
+      },
       Options(
         headers: {
           'accept': 'application/json',

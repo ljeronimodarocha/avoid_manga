@@ -1,6 +1,7 @@
 import 'package:avoid_manga/domain/entities/manga_entity.dart';
 import 'package:avoid_manga/ui/home/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:result_command/result_command.dart';
 
 class InputSearchHome extends StatelessWidget {
   const InputSearchHome(this.homeViewModel, {super.key});
@@ -13,15 +14,18 @@ class InputSearchHome extends StatelessWidget {
       child: SizedBox(
         width: 200,
         child: Autocomplete<Manga>(
-          optionsBuilder: (TextEditingValue textEditingValue) {
+          initialValue: null,
+          optionsBuilder: (TextEditingValue textEditingValue) async {
             if (textEditingValue.text.isEmpty) {
-              return const Iterable<Manga>.empty();
+              return List<Manga>.empty();
             }
-            return homeViewModel.foundMangas.where((Manga manga) {
-              return manga.title
-                  .toLowerCase()
-                  .contains(textEditingValue.text.toLowerCase());
-            });
+            await homeViewModel.findMangaComand.execute(textEditingValue.text);
+            if (homeViewModel.findMangaComand.isSuccess) {
+              var success =
+                  homeViewModel.findMangaComand.value as SuccessCommand;
+              return success.value as List<Manga>;
+            }
+            return List<Manga>.empty();
           },
           displayStringForOption: (Manga manga) => manga.title,
           onSelected: (Manga manga) {
@@ -36,9 +40,6 @@ class InputSearchHome extends StatelessWidget {
             return TextField(
               controller: textEditingController,
               focusNode: focusNode,
-              onChanged: (value) {
-                homeViewModel.findMangaComand.execute(value);
-              },
               decoration: InputDecoration(
                 hintText: 'Pesquisar manga...',
                 border: OutlineInputBorder(

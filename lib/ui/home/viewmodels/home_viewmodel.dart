@@ -9,10 +9,8 @@ class HomeViewmodel {
   HomeViewmodel(this._mangaRepository);
 
   final List<Manga> _mangas = [];
-  List<Manga> _foundMangas = [];
 
   List<Manga> get mangas => _mangas;
-  List<Manga> get foundMangas => _foundMangas;
 
   final MangaRepository _mangaRepository;
 
@@ -26,12 +24,8 @@ class HomeViewmodel {
     return Success.unit();
   }
 
-  AsyncResult<Unit> _findMangaByTitle(String name) async {
-    _foundMangas =[ ];
-    await _mangaRepository.getMangas(name, 10).onSuccess((success) {
-      _foundMangas = success;
-    });
-    return Success.unit();
+  AsyncResult<List<Manga>> _findMangaByTitle(String name) async {
+    return await _mangaRepository.getMangas(name, 5);
   }
 
   void goToMangaPage(Manga manga) {
