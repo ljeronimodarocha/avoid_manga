@@ -16,29 +16,44 @@ class MangaPage extends StatefulWidget {
 }
 
 class _MangaPageState extends State<MangaPage> {
-  late final String coverUrl;
   late Manga manga;
   late List<Volume> volumes;
-  bool _isImagePrecached = false;
   final mangaViewModel = injector.get<MangaViewmodel>();
+  late String coverUrl;
 
   @override
   void initState() {
     super.initState();
+    mangaViewModel.volumesComand.addListener(_listenable);
+    mangaViewModel.isFollowMangaCommand.addListener(__listenableFavorite);
+  }
+
+  @override
+  void dispose() {
+    mangaViewModel.volumesComand.removeListener(_listenable);
+    mangaViewModel.isFollowMangaCommand.removeListener(__listenableFavorite);
+    super.dispose();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_isImagePrecached) {
-      var mangaData = Routefly.of(context).query.arguments;
-      manga = Manga.fromJsonCustom(mangaData);
-      coverUrl =
-          '${AppConstants.baseUrlUpload}covers/${manga.id}/${manga.fileName}';
-      precacheImage(NetworkImage(coverUrl), context);
-      mangaViewModel.volumesComand.execute(manga.id);
-      mangaViewModel.volumesComand.addListener(_listenable);
-      _isImagePrecached = true;
+    final mangaData = Routefly.of(context).query.arguments;
+    manga = Manga.fromJsonCustom(mangaData);
+    coverUrl =
+        '${AppConstants.baseUrlUpload}covers/${manga.id}/${manga.fileName}';
+
+    precacheImage(NetworkImage(coverUrl), context);
+
+    mangaViewModel.volumesComand.execute(manga.id);
+    mangaViewModel.isFollowMangaCommand.execute(manga.id);
+  }
+
+  void __listenableFavorite() {
+    if (mangaViewModel.isFollowMangaCommand.isSuccess) {
+      var success = mangaViewModel.isFollowMangaCommand.value as SuccessCommand;
+
+      manga = Manga.isFollow(manga, success.value as bool);
     }
   }
 
@@ -68,9 +83,37 @@ class _MangaPageState extends State<MangaPage> {
               children: [
                 Image.network(coverUrl),
                 const SizedBox(height: 20),
-                const Text(
-                  "Descrição",
-                  style: TextStyle(fontSize: 20),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 20,
+                  children: [
+                    const Text(
+                      "Descrição",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    ListenableBuilder(
+                      listenable: mangaViewModel.isFollowMangaCommand,
+                      builder: (context, child) {
+                        return IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            manga.isFollow == true
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            size: 30,
+                          ),
+                        );
+                      },
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.star,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 20),
                 Text(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:routefly/routefly.dart';
 
 class ChapterPage extends StatefulWidget {
-  const ChapterPage();
+  const ChapterPage({super.key});
 
   @override
   State<ChapterPage> createState() => _ChapterPageState();
@@ -15,9 +15,6 @@ class _ChapterPageState extends State<ChapterPage> {
   Widget build(BuildContext context) {
     var chapter = Routefly.of(context).query.arguments;
     var newChapter = Chapter.fromJson(chapter);
-    print(newChapter.images != null);
-    print(
-        '${AppConstants.baseUrlUpload}data/${newChapter.hashChapter}/${newChapter.images?.first}');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

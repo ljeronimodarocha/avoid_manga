@@ -24,4 +24,22 @@ class Credentials {
   void setClientSecret(String clientSecret) {
     this.clientSecret = clientSecret;
   }
+
+  factory Credentials.fromJson(Map<String, dynamic> json) {
+    return Credentials(
+      username: json['username'] ?? '',
+      password: json['password'] ?? '',
+      clientId: json['clientId'] ?? '',
+      clientSecret: json['clientSecret'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'username': username,
+      'password': password,
+      'clientId': clientId,
+      'clientSecret': clientSecret,
+    };
+  }
 }

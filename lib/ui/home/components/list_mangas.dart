@@ -58,41 +58,35 @@ class _ListMangasComponentState extends State<ListMangasComponent> {
       child: ListenableBuilder(
           listenable: homeViewModel.mangaComand,
           builder: (context, _) {
-            if (homeViewModel.mangaComand.isSuccess && homeViewModel.mangas.isNotEmpty) {
+            if (homeViewModel.mangaComand.isSuccess &&
+                homeViewModel.mangas.isNotEmpty) {
               return Align(
-                  child: ListView.builder(
-                      controller: _scrollController,
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: homeViewModel.mangas.length,
-                      prototypeItem: ListTile(
-                        title: Text(
-                          textAlign: TextAlign.center,
-                          homeViewModel.mangas.first.title,
-                          selectionColor: Colors.black,
-                        ),
-                      ),
-                      itemBuilder: (BuildContext context, index) {
-                        return MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: () {
-                              homeViewModel.goToMangaPage(homeViewModel.mangas[index]);
-                            },
-                            child: ListTile(
-                              style: ListTileStyle.list,
-                              title: Text(
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ),
-                                textAlign: TextAlign.center,
-                                homeViewModel.mangas[index].title,
-                                selectionColor: Colors.black,
-                              ),
+                alignment: Alignment.center,
+                child: ListView.builder(
+                    controller: _scrollController,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: homeViewModel.mangas.length,
+                    itemBuilder: (BuildContext context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          homeViewModel
+                              .goToMangaPage(homeViewModel.mangas[index]);
+                        },
+                        child: ListTile(
+                          style: ListTileStyle.list,
+                          title: Text(
+                            style: const TextStyle(
+                              fontSize: 15,
                             ),
+                            textAlign: TextAlign.center,
+                            homeViewModel.mangas[index].title,
+                            selectionColor: Colors.black,
                           ),
-                        );
-                      }));
+                        ),
+                      );
+                    }),
+              );
             } else if (homeViewModel.mangaComand.isRunning) {
               return const Center(
                 child: CircularProgressIndicator(),

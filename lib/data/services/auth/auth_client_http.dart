@@ -10,6 +10,33 @@ class AuthClientHttp {
 
   AuthClientHttp(this._clienteHttp);
 
+  AsyncResult<LoggedUser> refresh(
+      Credentials credentials, String refreshToken) async {
+    final response = await _clienteHttp.post(
+        AppConstants.authURL,
+        {
+          'grant_type': 'refresh_token',
+          'refresh_token': refreshToken,
+          'client_id': credentials.clientId,
+          'client_secret': credentials.clientSecret,
+        },
+        Options(
+            contentType: Headers.formUrlEncodedContentType,
+            receiveDataWhenStatusError: true,
+            responseType: ResponseType.json));
+    return response.map((response) {
+      num refreshExpiresIn = DateTime.now()
+          .add(const Duration(seconds: 900))
+          .millisecondsSinceEpoch;
+      num expiresIn = DateTime.now()
+          .add(const Duration(seconds: 900))
+          .millisecondsSinceEpoch;
+      response.data['refresh_expires_in'] = refreshExpiresIn;
+      response.data['expires_in'] = expiresIn;
+      return LoggedUser.fromJson(response.data);
+    });
+  }
+
   AsyncResult<LoggedUser> login(Credentials credentials) async {
     final response = await _clienteHttp.post(
         AppConstants.authURL,
@@ -25,6 +52,14 @@ class AuthClientHttp {
             receiveDataWhenStatusError: true,
             responseType: ResponseType.json));
     return response.map((response) {
+      num refreshExpiresIn = DateTime.now()
+          .add(const Duration(seconds: 900))
+          .millisecondsSinceEpoch;
+      num expiresIn = DateTime.now()
+          .add(const Duration(seconds: 900))
+          .millisecondsSinceEpoch;
+      response.data['refresh_expires_in'] = refreshExpiresIn;
+      response.data['expires_in'] = expiresIn;
       return LoggedUser.fromJson(response.data);
     });
   }

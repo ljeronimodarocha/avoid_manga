@@ -13,6 +13,7 @@ import 'package:avoid_manga/data/services/chapter/chapter_client_http.dart';
 import 'package:avoid_manga/data/services/client_http.dart';
 import 'package:avoid_manga/data/services/local_storage.dart';
 import 'package:avoid_manga/data/services/manga/manga_client_http.dart';
+import 'package:avoid_manga/data/services/manga/manga_local_storage.dart';
 import 'package:avoid_manga/data/services/volume/volume_client_http.dart';
 import 'package:avoid_manga/main_viewmodel.dart';
 import 'package:avoid_manga/ui/auth/viewmodels/login_viewmodel.dart';
@@ -32,7 +33,10 @@ void setupDependencies() {
   injector.addInstance(Dio());
 
   injector.addSingleton(ClienteHttp.new);
+
   injector.addSingleton(LocalStorage.new);
+  injector.addSingleton(MangaLocalStorage.new);
+
   injector.addSingleton(AuthClientHttp.new);
   injector.addSingleton(AuthLocalStorage.new);
   injector.addSingleton(MangaClientHttp.new);

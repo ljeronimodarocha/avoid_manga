@@ -3,4 +3,10 @@ import 'package:result_dart/result_dart.dart';
 
 abstract interface class MangaRepository {
   AsyncResult<List<Manga>> getMangas(String? name, int offset);
+
+  AsyncResult<Unit> updateReadManga(String id);
+
+  AsyncResult<Unit> followManga(String id);
+
+  AsyncResult<bool> isFollowManga(String id);
 }

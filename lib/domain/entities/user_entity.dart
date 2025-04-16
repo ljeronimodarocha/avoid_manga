@@ -23,3 +23,11 @@ sealed class User with _$User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 }
+
+extension LoggedUserMethods on LoggedUser {
+  bool isTokenValid() {
+    DateTime expiresInDate =
+        DateTime.fromMillisecondsSinceEpoch(expiresIn as int);
+    return !expiresInDate.isBefore(DateTime.now());
+  }
+}

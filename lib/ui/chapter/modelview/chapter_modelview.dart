@@ -18,7 +18,6 @@ class ChapterViewModel {
       chapter.hashChapter = sucees.hashChapter;
       chapter.images = sucees.images;
     }).onFailure((error) {
-      print(error);
     });
     return Success(chapter);
   }

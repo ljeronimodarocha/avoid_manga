@@ -27,9 +27,25 @@ class RemoteAuthRepository implements AuthRepository {
     final validator = CredentialsValidator();
     return await validator
         .validateResult(credentials)
+        .flatMap(_authLocalStorage.saveCredentials)
         .flatMap(_authClientHttp.login)
         .flatMap(_authLocalStorage.saveUser)
         .onSuccess(_streamController.add);
+  }
+
+  @override
+  AsyncResult<LoggedUser> refreshToken() async {
+    var user = await _authLocalStorage.getUser().getOrNull();
+    var credentials = await _authLocalStorage.getCredentials().getOrNull();
+    if (user != null && credentials != null) {
+      if (!user.isTokenValid()) {
+        return await _authClientHttp
+            .refresh(credentials, user.refreshToken)
+            .flatMap(_authLocalStorage.saveUser);
+      }
+      return Success(user);
+    }
+    throw UnimplementedError();
   }
 
   @override
