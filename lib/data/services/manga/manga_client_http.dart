@@ -52,16 +52,53 @@ class MangaClientHttp {
   }
 
   AsyncResult<Unit> followManga(String id) async {
-    await _clienteHttp.post(
+    var user = await _authLocalStorage.getUser().getOrNull();
+    if (user == null) return Failure(Exception("User not logged"));
+
+    if (!user.isTokenValid()) {
+      user = await _authRepository.refreshToken().getOrNull();
+      if (user == null) return Failure(Exception("Unable to refresh token"));
+    }
+    final response = await _clienteHttp.post(
       '${AppConstants.baseUrl}/manga/$id/follow',
       {},
       Options(
         headers: {
           'accept': 'application/json',
+          'Authorization': 'Bearer ${user.token}',
         },
       ),
     );
-    return AsyncResult.value(Success.unit());
+    if (response.isSuccess()) {
+      return AsyncResult.value(Success.unit());
+    } else {
+      return Failure(Exception("Unable to follow manga"));
+    }
+  }
+
+  AsyncResult<Unit> unfollowManga(String id) async {
+    var user = await _authLocalStorage.getUser().getOrNull();
+    if (user == null) return Failure(Exception("User not logged"));
+
+    if (!user.isTokenValid()) {
+      user = await _authRepository.refreshToken().getOrNull();
+      if (user == null) return Failure(Exception("Unable to refresh token"));
+    }
+    final response = await _clienteHttp.delete(
+      '${AppConstants.baseUrl}/manga/$id/follow',
+      {},
+      Options(
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Bearer ${user.token}',
+        },
+      ),
+    );
+    if (response.isSuccess()) {
+      return AsyncResult.value(Success.unit());
+    } else {
+      return Failure(Exception("Unable to follow manga"));
+    }
   }
 
   AsyncResult<bool> isFollowManga(String id) async {

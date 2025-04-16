@@ -35,9 +35,10 @@ class ClienteHttp {
     }
   }
 
-  AsyncResult<Response> delete(String url, dynamic data) async {
+  AsyncResult<Response> delete(
+      String url, dynamic data, Options? options) async {
     try {
-      final response = await _dio.delete(url, data: data);
+      final response = await _dio.delete(url, data: data, options: options);
       return Success(response);
     } on DioException catch (e) {
       return Failure(e);

@@ -9,4 +9,6 @@ abstract interface class MangaRepository {
   AsyncResult<Unit> followManga(String id);
 
   AsyncResult<bool> isFollowManga(String id);
+
+  AsyncResult<Unit> unfollowManga(String id);
 }

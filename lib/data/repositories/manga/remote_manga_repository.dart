@@ -19,6 +19,11 @@ class RemoteMangaRepository implements MangaRepository {
   }
 
   @override
+  AsyncResult<Unit> unfollowManga(String id) {
+    return _mangaClientHttp.unfollowManga(id);
+  }
+
+  @override
   AsyncResult<Unit> followManga(String id) {
     return _mangaClientHttp.followManga(id);
   }

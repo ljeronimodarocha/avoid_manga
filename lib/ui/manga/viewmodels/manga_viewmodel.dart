@@ -15,7 +15,17 @@ class MangaViewmodel {
   late final volumesComand = Command1(_listVolumes);
   late final isFollowMangaCommand = Command1(_isFollowManga);
 
+  late final addFavoritedCommand = Command2(_addFavorited);
+
   List<Volume> get volumes => _volumes;
+
+  AsyncResult<Unit> _addFavorited(String idManga, bool addFavorited) async {
+    if (addFavorited){
+       return await _mangaRepository.followManga(idManga);
+    }else {
+      return await _mangaRepository.unfollowManga(idManga);
+    }
+  }
 
   AsyncResult<Unit> _listVolumes(String idManga) async {
     await _volumeRepository.getVolumes(idManga).onSuccess((success) {

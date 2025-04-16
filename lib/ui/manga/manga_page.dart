@@ -96,7 +96,13 @@ class _MangaPageState extends State<MangaPage> {
                       listenable: mangaViewModel.isFollowMangaCommand,
                       builder: (context, child) {
                         return IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            mangaViewModel.addFavoritedCommand
+                                .execute(manga.id, !manga.isFollow!);
+                            setState(() {
+                              manga = Manga.isFollow(manga, !manga.isFollow!);
+                            });
+                          },
                           icon: Icon(
                             manga.isFollow == true
                                 ? Icons.favorite
