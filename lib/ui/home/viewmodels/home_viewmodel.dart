@@ -9,17 +9,33 @@ class HomeViewmodel {
   HomeViewmodel(this._mangaRepository);
 
   final List<Manga> _mangas = [];
+  final List<Manga> _mangasFavotited = [];
 
   List<Manga> get mangas => _mangas;
+  List<Manga> get mangasFavotited => _mangasFavotited;
 
   final MangaRepository _mangaRepository;
 
   late final mangaComand = Command1(_listMangas);
+  late final mangaFavoritedComand = Command1(_listMangasFavorited);
   late final findMangaComand = Command1(_findMangaByTitle);
 
   AsyncResult<Unit> _listMangas(int offset) async {
     await _mangaRepository.getMangas('', offset).onSuccess((success) {
+      if (offset == 0) {
+        _mangas.clear();
+      }
       _mangas.addAll(success);
+    });
+    return Success.unit();
+  }
+
+  AsyncResult<Unit> _listMangasFavorited(int offset) async {
+    await _mangaRepository.getMangasFavorited('', offset).onSuccess((success) {
+      if (offset == 0) {
+        _mangasFavotited.clear();
+      }
+      _mangasFavotited.addAll(success);
     });
     return Success.unit();
   }

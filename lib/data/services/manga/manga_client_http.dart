@@ -36,6 +36,31 @@ class MangaClientHttp {
     return response.map(_convertListManga).mapError((ex) => Exception(ex));
   }
 
+  AsyncResult<List<Manga>> getMangasFavorited(String? name, int offset) async {
+    var user = await _authLocalStorage.getUser().getOrNull();
+    if (user == null) return Failure(Exception("User not logged"));
+
+    if (!user.isTokenValid()) {
+      user = await _authRepository.refreshToken().getOrNull();
+      if (user == null) return Failure(Exception("Unable to refresh token"));
+    }
+    final response = await _clienteHttp.get(
+      '${AppConstants.baseUrl}/user/follows/manga',
+      {
+        'limit': 20,
+        'offset': offset,
+        'includes[]': ['cover_art'],
+      },
+      Options(
+        headers: {
+          'accept': 'application/json',
+          'Authorization': 'Bearer ${user.token}',
+        },
+      ),
+    );
+    return response.map(_convertListManga).mapError((ex) => Exception(ex));
+  }
+
   AsyncResult<Unit> updateReadManga(String id) async {
     await _clienteHttp.get(
       '${AppConstants.baseUrl}/manga/$id/status',
