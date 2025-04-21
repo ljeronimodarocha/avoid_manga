@@ -28,6 +28,16 @@ class _ShowVolumeState extends State<ShowVolume> {
 
   @override
   Widget build(BuildContext context) {
+    final chapters = widget.volume.chapters.reversed.toList();
+    for (int i = 0; i < chapters.length; i++) {
+      if (i > 0) {
+        chapters[i].previous = chapters[i - 1];
+      }
+      if (i < chapters.length - 1) {
+        chapters[i].next = chapters[i + 1];
+      }
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -54,9 +64,9 @@ class _ShowVolumeState extends State<ShowVolume> {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: widget.volume.chapters.length,
+                    itemCount: chapters.length,
                     itemBuilder: (BuildContext context, index) {
-                      final chapter = widget.volume.chapters[index];
+                      final chapter = chapters[index];
                       return GestureDetector(
                         onTap: () {
                           chapterViewModel.goToChapterPage(chapter);

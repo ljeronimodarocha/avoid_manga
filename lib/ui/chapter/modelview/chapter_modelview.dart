@@ -17,14 +17,13 @@ class ChapterViewModel {
       chapter.baseUrl = sucees.baseUrl;
       chapter.hashChapter = sucees.hashChapter;
       chapter.images = sucees.images;
-    }).onFailure((error) {
-    });
+    }).onFailure((error) {});
     return Success(chapter);
   }
 
   void goToChapterPage(Chapter chapter) async {
     await _setChapterImages(chapter).onSuccess((chapter) {
-      Routefly.push(routePaths.chapter, arguments: chapter.toJson());
+      Routefly.push(routePaths.chapter, arguments: chapter);
     });
   }
 }
